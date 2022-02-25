@@ -1,0 +1,8 @@
+npm init -y
+npm i --save-dev typescript ts-node @types/node @types/jasmine jasmine-spec-reporter @types/express @types/supertest eslint-config-prettier eslint-plugin-prettier nodemon prettier
+npm i jasmine supertest typescript
+npx jasmine init # create conf file
+npx tsc --init
+Add a build script to your package.json file "build": "npx tsc"
+npm run build
+node build/.
