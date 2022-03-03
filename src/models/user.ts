@@ -13,6 +13,7 @@ export class UserStore {
       const sql = 'select * from Users'
       const result = await conn.query(sql)
       conn.release()
+      // @ts-ignore
       return result.rows
     } catch (error) {
       throw new Error(`Coudnt get Users. Error:${error}`)
@@ -22,7 +23,7 @@ export class UserStore {
   async show (id: string): Promise<User> {
     try {
       const sql = 'SELECT * FROM Users WHERE id=($1)'
-      // @ts-ignore
+
       const conn = await Client.connect()
 
       const result = await conn.query(sql, [id])
@@ -38,7 +39,6 @@ export class UserStore {
   async create (u: User): Promise<User> {
     try {
       const sql = 'INSERT INTO Users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *'
-      // @ts-ignore
       const conn = await Client.connect()
 
       const result = await conn
@@ -57,7 +57,6 @@ export class UserStore {
   async delete (id: string): Promise<User> {
     try {
       const sql = 'DELETE FROM Users WHERE id=($1)'
-      // @ts-ignore
       const conn = await Client.connect()
 
       const result = await conn.query(sql, [id])

@@ -1,7 +1,6 @@
-
 import Client from '../db'
 export type Product = {
-    id: number;
+    id?: number;
     name: string;
     category: string;
     price: number
@@ -14,6 +13,7 @@ export class ProductStore {
       const sql = 'select * from products'
       const result = await conn.query(sql)
       conn.release()
+      // @ts-ignore
       return result.rows
     } catch (error) {
       throw new Error(`Coudnt get products. Error:${error}`)
@@ -23,13 +23,9 @@ export class ProductStore {
   async show (id: string): Promise<Product> {
     try {
       const sql = 'SELECT * FROM products WHERE id=($1)'
-      // @ts-ignore
       const conn = await Client.connect()
-
       const result = await conn.query(sql, [id])
-
       conn.release()
-
       return result.rows[0]
     } catch (err) {
       throw new Error(`Could not find book ${id}. Error: ${err}`)
@@ -39,7 +35,6 @@ export class ProductStore {
   async create (p: Product): Promise<Product> {
     try {
       const sql = 'INSERT INTO products (name, category, price) VALUES($1, $2, $3) RETURNING *'
-      // @ts-ignore
       const conn = await Client.connect()
 
       const result = await conn
@@ -58,15 +53,10 @@ export class ProductStore {
   async delete (id: string): Promise<Product> {
     try {
       const sql = 'DELETE FROM products WHERE id=($1)'
-      // @ts-ignore
       const conn = await Client.connect()
-
       const result = await conn.query(sql, [id])
-
       const product = result.rows[0]
-
       conn.release()
-
       return product
     } catch (err) {
       throw new Error(`Could not delete product ${id}. Error: ${err}`)

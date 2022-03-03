@@ -16,6 +16,7 @@ export class OrderStore {
       const sql = 'select * from Orders'
       const result = await conn.query(sql)
       conn.release()
+      // @ts-ignore
       return result.rows
     } catch (error) {
       throw new Error(`Coudnt get Orders. Error:${error}`)
@@ -25,7 +26,7 @@ export class OrderStore {
   async show (id: string): Promise<Order> {
     try {
       const sql = 'SELECT * FROM Orders WHERE id=($1)'
-      // @ts-ignore
+
       const conn = await Client.connect()
 
       const result = await conn.query(sql, [id])
