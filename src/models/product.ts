@@ -1,3 +1,4 @@
+
 import Client from '../db'
 export type Product = {
     id: number;

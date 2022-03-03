@@ -1,9 +1,9 @@
 import Express from 'express'
-import routes from './routes/index'
 import { logger } from './middlewares/logs'
 import errHandler from './middlewares/errors'
 import path from 'path'
 import bodyParser from 'body-parser'
+import productRoutes from './handlers/product_routes'
 
 const app: Express.Application = Express()
 const port: number = 8000
@@ -12,7 +12,8 @@ const staticCashe = Express.static(path.join(process.cwd(), 'assets'), {
 })
 const middleware = [staticCashe, logger, Express.json()]
 app.use(middleware)
-app.use('/api', routes)
+productRoutes(app)
+// app.use('/api', routes)
 app.use(errHandler)
 app.use(bodyParser.json())
 app.listen(port, () => {
