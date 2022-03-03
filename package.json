@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "jasmine": "jasmine",
     "migrate": " db-migrate up && db-migrate --env test up",
-    "test": "ENV=test db-migrate --env test up && npm run build && jasmine && db-migrate --env test down"
+    "test": "set ENV=test && db-migrate --env test up && npm run build && npm run jasmine && db-migrate --env test down -c 5"
   },
   "repository": {
     "type": "git",

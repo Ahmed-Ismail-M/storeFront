@@ -14,7 +14,6 @@ const {
 } = process.env
 let Client: Pool
 
-console.log(ENV)
 if (ENV === 'dev') {
   Client = new Pool({
     host: POSTGRES_HOST,
@@ -30,4 +29,5 @@ if (ENV === 'dev') {
     password: POSTGRES_PASSWORD
   })
 }
+console.log(ENV)
 export default Client
