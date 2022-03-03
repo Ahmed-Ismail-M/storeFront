@@ -9,8 +9,9 @@
     "lint": "eslint src/**/*.ts",
     "build": "npx tsc",
     "jasmine": "jasmine",
+    "drop":" db-migrate down && db-migrate --env test down",
     "migrate": " db-migrate up && db-migrate --env test up",
-    "test": "set ENV=test && db-migrate --env test up && npm run build && npm run jasmine && db-migrate --env test down -c 5"
+    "test": "db-migrate --env test up &&npm run build &&cross-env ENV=test jasmine && db-migrate --env test down -c 5"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/Ahmed-Ismail-M/storeFront#readme",
   "dependencies": {
     "body-parser": "^1.19.2",
+    "cross-env": "^7.0.3",
     "db-migrate": "^0.11.13",
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.0",
