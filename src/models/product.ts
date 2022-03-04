@@ -55,8 +55,9 @@ export class ProductStore {
       const sql = 'DELETE FROM products WHERE id=($1)'
       const conn = await Client.connect()
       const result = await conn.query(sql, [id])
-      const product = result.rows[0]
+      const product = result.rows
       conn.release()
+      // @ts-ignore
       return product
     } catch (err) {
       throw new Error(`Could not delete product ${id}. Error: ${err}`)

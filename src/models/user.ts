@@ -1,8 +1,8 @@
 import Client from '../db'
 export type User = {
     id: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     password: string
 }
 
@@ -42,7 +42,7 @@ export class UserStore {
       const conn = await Client.connect()
 
       const result = await conn
-        .query(sql, [u.firstName, u.lastName, u.password])
+        .query(sql, [u.first_name, u.last_name, u.password])
 
       const User = result.rows[0]
 
@@ -50,7 +50,7 @@ export class UserStore {
 
       return User
     } catch (err) {
-      throw new Error(`Could not add new User ${u.firstName}. Error: ${err}`)
+      throw new Error(`Could not add new User ${u.first_name}. Error: ${err}`)
     }
   }
 
@@ -61,10 +61,10 @@ export class UserStore {
 
       const result = await conn.query(sql, [id])
 
-      const User = result.rows[0]
+      const User = result.rows
 
       conn.release()
-
+      // @ts-ignore
       return User
     } catch (err) {
       throw new Error(`Could not delete User ${id}. Error: ${err}`)

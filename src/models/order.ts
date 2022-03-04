@@ -35,16 +35,16 @@ export class OrderStore {
 
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not find book ${id}. Error: ${err}`)
+      throw new Error(`Could not find order ${id}. Error: ${err}`)
     }
   }
 
   async create (o: Order): Promise<Order> {
     try {
-      const sql = 'INSERT INTO Orders (product_id, user_id, qty, status) VALUES($1, $2, $3, $4) RETURNING *'
+      const sql = 'INSERT INTO Orders (product_id, user_id, qty, status) VALUES($1, $2, $3, $4) RETURNING * '
       // @ts-ignore
       const conn = await Client.connect()
-
+      console.log(o.product.id + ' ' + o.user.id)
       const result = await conn
         .query(sql, [o.product.id, o.user.id, o.qty, o.status])
 
@@ -66,10 +66,10 @@ export class OrderStore {
 
       const result = await conn.query(sql, [id])
 
-      const Order = result.rows[0]
+      const Order = result.rows
 
       conn.release()
-
+      // @ts-ignore
       return Order
     } catch (err) {
       throw new Error(`Could not delete Order ${id}. Error: ${err}`)
