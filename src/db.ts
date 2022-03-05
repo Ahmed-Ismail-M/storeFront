@@ -10,7 +10,6 @@ const {
   POSTGRES_USER,
   POSTGRES_PASSWORD,
   ENV
-
 } = process.env
 let Client: Pool
 
