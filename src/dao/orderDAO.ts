@@ -49,11 +49,9 @@ export class OrderStore {
         o.status
       ])
 
-      const Order = result.rows[0]
-
       conn.release()
 
-      return Order
+      return result.rows[0]
     } catch (err) {
       throw new Error(`Could not add new Order ${o.id}. Error: ${err}`)
     }
@@ -67,11 +65,9 @@ export class OrderStore {
 
       const result = await conn.query(sql, [id])
 
-      const Order = result.rows
-
       conn.release()
       // @ts-ignore
-      return Order
+      return result.rows
     } catch (err) {
       throw new Error(`Could not delete Order ${id}. Error: ${err}`)
     }
