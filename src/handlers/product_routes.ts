@@ -8,7 +8,7 @@ const index = async (_req: Request, res: Response) => {
   res.json(products)
 }
 const show = async (req: Request, res: Response) => {
-  const product = await store.show(req.body.id)
+  const product = await store.show(parseInt(req.params.id) as number)
   res.json(product)
 }
 
