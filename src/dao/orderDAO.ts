@@ -1,6 +1,6 @@
 import Client from '../db'
 import { orderSerializer } from '../serializers/orderSerializer'
-import { Order } from '../models/order'
+import { Order, OrderQuery } from '../models/order'
 export class OrderStore {
   async index (): Promise<Order> {
     try {
@@ -35,16 +35,16 @@ export class OrderStore {
     }
   }
 
-  async create (o: Order): Promise<Order> {
+  async create (o: OrderQuery): Promise<Order> {
     try {
       const sql =
         'INSERT INTO Orders (product_id, user_id, qty, status) VALUES($1, $2, $3, $4) RETURNING * '
       // @ts-ignore
       const conn = await Client.connect()
-      console.log(o.product.id + ' ' + o.user.id)
+      console.log(o.product_id + ' ' + o.user_id)
       const result = await conn.query(sql, [
-        o.product.id,
-        o.user.id,
+        o.product_id,
+        o.user_id,
         o.qty,
         o.status
       ])

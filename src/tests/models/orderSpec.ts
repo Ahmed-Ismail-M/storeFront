@@ -10,7 +10,7 @@ const order: Order = {
   status: 'pending',
   qty: 1
 }
-const returnedOrder: OrderQuery = {
+const orderQuery: OrderQuery = {
   id: 1,
   product_id: 2,
   user_id: 2,
@@ -25,9 +25,9 @@ describe('order model', () => {
     await user_store.create(user)
   })
   it('should return order created', async () => {
-    const result = await store.create(order)
+    const result = await store.create(orderQuery)
     // @ts-ignore
-    expect(result).toEqual(returnedOrder)
+    expect(result).toEqual(orderQuery)
   })
   it('should return a list of orders', async () => {
     const result = await store.index()
