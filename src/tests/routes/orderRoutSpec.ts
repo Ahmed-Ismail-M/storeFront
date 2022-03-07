@@ -11,10 +11,10 @@ const orderQuery :OrderQuery = {
   status: 'pending'
 }
 describe('Test Server', () => {
-  describe('test /order', () => {
+  describe('test /orders', () => {
     it('shoud return 200 ok create order', (done) => {
       request(app)
-        .post('/order')
+        .post('/orders')
         .send({ id: orderQuery.id, product_id: orderQuery.product_id, user_id: orderQuery.user_id, qty: orderQuery.qty, status: orderQuery.status })
         .expect(200)
         .expect(orderQuery)
@@ -23,7 +23,7 @@ describe('Test Server', () => {
     })
     it('shoud return 200 ok get order', (done) => {
       request(app)
-        .get('/order')
+        .get('/orders')
         .expect(200)
         // .expect(typeof Array)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -31,7 +31,7 @@ describe('Test Server', () => {
     })
     it('shoud return 200 ok get order by id', (done) => {
       request(app)
-        .get('/order/2')
+        .get('/orders/2')
         .expect(200)
         .expect(async () => { orderSerializer(orderQuery) })
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -39,17 +39,17 @@ describe('Test Server', () => {
     })
     it('shoud return 200 ok delete order', (done) => {
       request(app)
-        .delete('/order')
+        .delete('/orders')
         .send({ id: 3 })
         .expect(200)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
   })
-  describe('error test /order', () => {
+  describe('error test /orders', () => {
     it('shoud return error 400 price is not a number', (done) => {
       request(app)
-        .post('/order')
+        .post('/orders')
         .send({ id: orderQuery.id, product_id: orderQuery.product_id, user_id: orderQuery.user_id, qty: 'string', status: orderQuery.status })
         .expect(400)
         .expect({})
@@ -58,7 +58,7 @@ describe('Test Server', () => {
     })
     it('shoud return error 400 price is not a number', (done) => {
       request(app)
-        .delete('/order')
+        .delete('/orders')
         .send({ id: 33 })
         .expect([])
         .expect('Content-Type', 'application/json; charset=utf-8')
