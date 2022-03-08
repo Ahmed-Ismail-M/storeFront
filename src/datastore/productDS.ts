@@ -1,6 +1,7 @@
 import Client from '../db'
 import { Product } from '../models/product'
-export class ProductStore {
+import { ProductDAO } from './dao/productDAO'
+export class ProductStore implements ProductDAO {
   async index (): Promise<Product> {
     try {
       const conn = await Client.connect()

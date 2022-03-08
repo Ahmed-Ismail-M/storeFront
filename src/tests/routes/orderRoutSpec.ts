@@ -1,9 +1,8 @@
 import Express from 'express'
-import { OrderQuery } from '../../models/order'
-import { orderSerializer } from '../../serializers/orderSerializer'
+import { Order } from '../../models/order'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
-const orderQuery :OrderQuery = {
+const order :Order = {
   id: 2,
   product_id: 2,
   user_id: 2,
@@ -15,9 +14,9 @@ describe('Test Server', () => {
     it('shoud return 200 ok create order', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: orderQuery.id, product_id: orderQuery.product_id, user_id: orderQuery.user_id, qty: orderQuery.qty, status: orderQuery.status })
+        .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: order.qty, status: order.status })
         .expect(200)
-        .expect(orderQuery)
+        .expect(order)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -33,7 +32,7 @@ describe('Test Server', () => {
       request(app)
         .get('/orders/2')
         .expect(200)
-        .expect(async () => { orderSerializer(orderQuery) })
+        .expect(order)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -50,7 +49,7 @@ describe('Test Server', () => {
     it('shoud return error 400 price is not a number', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: orderQuery.id, product_id: orderQuery.product_id, user_id: orderQuery.user_id, qty: 'string', status: orderQuery.status })
+        .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: 'string', status: order.status })
         .expect(400)
         .expect({})
         .expect('Content-Type', 'application/json; charset=utf-8')

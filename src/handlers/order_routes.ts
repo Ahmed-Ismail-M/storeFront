@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
-import { OrderQuery } from '../models/order'
-import { OrderStore } from '../dao/orderDAO'
+import { OrderStore } from '../datastore/orderDS'
+import { Order } from '../models/order'
 const store = new OrderStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -14,7 +14,7 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   try {
-    const order: OrderQuery = {
+    const order: Order = {
       product_id: req.body.product_id,
       user_id: req.body.user_id,
       status: req.body.status,

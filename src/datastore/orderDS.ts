@@ -1,17 +1,13 @@
 import Client from '../db'
-import { orderSerializer } from '../serializers/orderSerializer'
-import { Order, OrderQuery } from '../models/order'
-export class OrderStore {
+import { Order } from '../models/order'
+import { OrderDAO } from './dao/orderDAO'
+export class OrderStore implements OrderDAO {
   async index (): Promise<Order> {
     try {
       const conn = await Client.connect()
       const sql = 'select * from Orders'
       const result = await conn.query(sql)
       conn.release()
-      for (let r = 0; r < result.rows.length; ++r) {
-        result.rows[r] = await orderSerializer(result.rows[r])
-      }
-      // result.rows.forEach(async (row) => { row = await orderSerializer(row) })
       // @ts-ignore
       return result.rows
     } catch (error) {
@@ -28,14 +24,13 @@ export class OrderStore {
       const result = await conn.query(sql, [id])
 
       conn.release()
-      const order: Promise<Order> = orderSerializer(result.rows[0])
-      return order
+      return result.rows[0]
     } catch (err) {
       throw new Error(`Could not find order ${id}. Error: ${err}`)
     }
   }
 
-  async create (o: OrderQuery): Promise<Order> {
+  async create (o: Order): Promise<Order> {
     try {
       const sql =
         'INSERT INTO Orders (product_id, user_id, qty, status) VALUES($1, $2, $3, $4) RETURNING * '

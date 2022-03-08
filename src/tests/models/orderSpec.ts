@@ -1,16 +1,9 @@
-import { Order, OrderQuery } from '../../models/order'
-import { OrderStore } from '../../dao/orderDAO'
+import { Order } from '../../models/order'
+import { OrderStore } from '../../datastore/orderDS'
 import { product, store as product_store } from './productSpec'
-import { user, store as user_store } from './user_spec'
+import { userReturned, store as user_store } from './user_spec'
 const store = new OrderStore()
 const order: Order = {
-  id: 1,
-  product: product,
-  user: user,
-  status: 'pending',
-  qty: 1
-}
-const orderQuery: OrderQuery = {
   id: 1,
   product_id: 2,
   user_id: 2,
@@ -20,14 +13,14 @@ const orderQuery: OrderQuery = {
 describe('order model', () => {
   beforeAll(async () => {
     product.id = 2
-    user.id = 2
+    userReturned.id = 2
     await product_store.create(product)
-    await user_store.create(user)
+    await user_store.create(userReturned)
   })
   it('should return order created', async () => {
-    const result = await store.create(orderQuery)
+    const result = await store.create(order)
     // @ts-ignore
-    expect(result).toEqual(orderQuery)
+    expect(result).toEqual(order)
   })
   it('should return a list of orders', async () => {
     const result = await store.index()

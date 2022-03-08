@@ -1,5 +1,5 @@
 import { Product } from '../../models/product'
-import { ProductStore } from '../../dao/productDAO'
+import { ProductStore } from '../../datastore/productDS'
 export const store = new ProductStore()
 export const product: Product = {
   id: 1,

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { User } from '../models/user'
-import { UserStore } from '../dao/userDAO'
+import { UserStore } from '../datastore/userDS'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
