@@ -8,6 +8,7 @@ export class OrderStore implements OrderDAO {
       const sql = 'select * from Orders'
       const result = await conn.query(sql)
       conn.release()
+
       // @ts-ignore
       return result.rows
     } catch (error) {

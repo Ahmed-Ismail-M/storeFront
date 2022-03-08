@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express'
+import { CreateOrderReq, CreateOrderRes } from '../api/orderAPI'
 import { OrderStore } from '../datastore/orderDS'
+import { ExpressHandler } from '../models/handler'
 import { Order } from '../models/order'
 const store = new OrderStore()
 
@@ -12,21 +14,17 @@ const show = async (req: Request, res: Response) => {
   res.json(order)
 }
 
-const create = async (req: Request, res: Response) => {
-  try {
-    const order: Order = {
-      product_id: req.body.product_id,
-      user_id: req.body.user_id,
-      status: req.body.status,
-      qty: req.body.qty
-    }
-
-    const newOrder = await store.create(order)
-    res.json(newOrder)
-  } catch (err) {
+const create: ExpressHandler<CreateOrderReq, CreateOrderRes> = async (req, res) => {
+  if (!req.body.product_id || !req.body.qty || !req.body.user_id) {
     res.status(400)
-    res.json(err)
   }
+  const order: Order = {
+    user_id: req.body.user_id,
+    product_id: req.body.product_id,
+    status: 'pending'
+  }
+  const newOrder = await store.create(order)
+  res.json(newOrder)
 }
 
 const destroy = async (req: Request, res: Response) => {
