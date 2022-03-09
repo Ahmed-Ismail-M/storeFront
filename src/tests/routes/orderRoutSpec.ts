@@ -16,7 +16,7 @@ describe('Test Server', () => {
         .post('/orders')
         .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: order.qty, status: order.status })
         .expect(200)
-        .expect(order)
+        .expect({ order })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -46,7 +46,7 @@ describe('Test Server', () => {
     })
   })
   describe('error test /orders', () => {
-    it('shoud return error 400 price is not a number', (done) => {
+    it('shoud return error 400 qty is not string', (done) => {
       request(app)
         .post('/orders')
         .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: 'string', status: order.status })

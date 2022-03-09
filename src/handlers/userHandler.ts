@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
 import { User } from '../models/user'
 import { UserStore } from '../datastore/userDS'
+import { ExpressHandler } from '../models/handler'
+import { SignUpReq, SignUpRes } from '../api/userAPI'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -12,19 +14,24 @@ const show = async (req: Request, res: Response) => {
   res.json(user)
 }
 
-const create = async (req: Request, res: Response) => {
+const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
   try {
     const user: User = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      password: req.body.password
+      first_name: req.body.first_name as string,
+      last_name: req.body.last_name as string,
+      password: req.body.password as string
     }
 
     const newUser = await store.create(user)
-    res.json(newUser)
+    const signupres: SignUpRes = {
+      id: newUser.id,
+      first_name: newUser.first_name,
+      last_name: newUser.last_name
+    }
+    res.send({ signupres })
   } catch (err) {
     res.status(400)
-    res.json(err)
+    res.json(err as string)
   }
 }
 

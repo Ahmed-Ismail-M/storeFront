@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 dotenv.config()
 
-const addedPassword: string| undefined = process.env.BCRYPT_PASSWORD
+const addedPassword: string = process.env.BCRYPT_PASSWORD as string
 const saltRound: string = process.env.SALT_ROUND as string
 
 export function hashPass (password:string): string {

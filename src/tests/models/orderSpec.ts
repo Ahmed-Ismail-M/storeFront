@@ -1,7 +1,7 @@
 import { Order } from '../../models/order'
 import { OrderStore } from '../../datastore/orderDS'
 import { product, store as product_store } from './productSpec'
-import { userReturned, store as user_store } from './user_spec'
+import { user, store as user_store } from './user_spec'
 const store = new OrderStore()
 const order: Order = {
   id: 1,
@@ -13,9 +13,9 @@ const order: Order = {
 describe('order model', () => {
   beforeAll(async () => {
     product.id = 2
-    userReturned.id = 2
+    user.id = 2
     await product_store.create(product)
-    await user_store.create(userReturned)
+    await user_store.create(user)
   })
   it('should return order created', async () => {
     const result = await store.create(order)

@@ -1,7 +1,7 @@
 export type Order = {
-  id?: number
-  product_id: number
-  qty: number
-  user_id: number
+  id?: string | number
+  product_id: string | number
+  qty: string | number
+  user_id: string | number
   status: string
 }

@@ -1,6 +1,6 @@
 import Express from 'express'
+import { SignUpRes } from '../../api/userAPI'
 import { User } from '../../models/user'
-import { hashPass } from '../../utilities/hash'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
 const user :User = {
@@ -9,11 +9,10 @@ const user :User = {
   last_name: 'last name',
   password: 'general'
 }
-const returnedUser :User = {
+const returnedUser :SignUpRes = {
   id: 3,
   first_name: 'user',
-  last_name: 'last name',
-  password: hashPass('general')
+  last_name: 'last name'
 }
 
 describe('Test Server', () => {
@@ -23,7 +22,7 @@ describe('Test Server', () => {
         .post('/users')
         .send({ id: user.id, first_name: user.first_name, last_name: user.last_name, password: user.password })
         .expect(200)
-        .expect(returnedUser)
+        .expect({ returnedUser })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -39,7 +38,7 @@ describe('Test Server', () => {
       request(app)
         .get('/users/3')
         .expect(200)
-        .expect(returnedUser)
+        .expect({ returnedUser })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
