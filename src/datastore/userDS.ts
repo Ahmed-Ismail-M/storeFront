@@ -1,6 +1,6 @@
 import Client from '../db'
 import { User } from '../models/user'
-import { hashPass } from '../utilities/hash'
+import { hashPass } from '../utilities/security'
 import { UserDAO } from './dao/userDAO'
 
 export class UserStore implements UserDAO {

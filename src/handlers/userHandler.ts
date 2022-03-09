@@ -3,6 +3,7 @@ import { User } from '../models/user'
 import { UserStore } from '../datastore/userDS'
 import { ExpressHandler } from '../models/handler'
 import { GetUserRes, SignUpReq, SignUpRes } from '../api/userAPI'
+import { issueToken } from '../utilities/security'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -32,7 +33,8 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       first_name: newUser.first_name,
       last_name: newUser.last_name
     }
-    res.send({ signupres })
+    const token = issueToken({ user: signupres }, '1s')
+    res.json(token)
   } catch (err) {
     res.status(400)
     res.json(err as string)

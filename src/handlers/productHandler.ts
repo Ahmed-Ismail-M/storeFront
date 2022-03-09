@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
 import { Product } from '../models/product'
 import { ProductStore } from '../datastore/productDS'
+import { verifyAuthToken } from '../middlewares/auth'
+import { asyncWrapper } from '../middlewares/logs'
 const store = new ProductStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -34,10 +36,10 @@ const destroy = async (req: Request, res: Response) => {
 }
 
 const productRoutes = (app: express.Application) => {
-  app.get('/products', index)
-  app.get('/products/:id', show)
-  app.post('/products', create)
-  app.delete('/products', destroy)
+  app.get('/products', verifyAuthToken, asyncWrapper(index))
+  app.get('/products/:id', verifyAuthToken, asyncWrapper(show))
+  app.post('/products', verifyAuthToken, asyncWrapper(create))
+  app.delete('/products', verifyAuthToken, asyncWrapper(destroy))
 }
 
 export default productRoutes
