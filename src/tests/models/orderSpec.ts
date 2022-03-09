@@ -1,7 +1,7 @@
 import { Order } from '../../models/order'
 import { OrderStore } from '../../datastore/orderDS'
 import { product, store as product_store } from './productSpec'
-import { user, store as user_store } from './user_spec'
+import { user, store as user_store } from './userSpec'
 const store = new OrderStore()
 const order: Order = {
   id: 1,

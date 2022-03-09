@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import { User } from '../models/user'
 import { UserStore } from '../datastore/userDS'
 import { ExpressHandler } from '../models/handler'
-import { SignUpReq, SignUpRes } from '../api/userAPI'
+import { GetUserRes, SignUpReq, SignUpRes } from '../api/userAPI'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -11,7 +11,11 @@ const index = async (_req: Request, res: Response) => {
 }
 const show = async (req: Request, res: Response) => {
   const user = await store.show(parseInt(req.params.id) as number)
-  res.json(user)
+  const userReq: GetUserRes = {
+    first_name: user.first_name,
+    last_name: user.last_name
+  }
+  res.json(userReq)
 }
 
 const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {

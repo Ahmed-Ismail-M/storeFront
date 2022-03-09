@@ -1,5 +1,5 @@
 import Express from 'express'
-import { SignUpRes } from '../../api/userAPI'
+import { GetUserRes, SignUpRes } from '../../api/userAPI'
 import { User } from '../../models/user'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
@@ -14,7 +14,10 @@ const returnedUser :SignUpRes = {
   first_name: 'user',
   last_name: 'last name'
 }
-
+const userReq : GetUserRes = {
+  first_name: user.first_name,
+  last_name: user.last_name
+}
 describe('Test Server', () => {
   describe('test /users', () => {
     it('shoud return 200 ok create user', (done) => {
@@ -22,7 +25,7 @@ describe('Test Server', () => {
         .post('/users')
         .send({ id: user.id, first_name: user.first_name, last_name: user.last_name, password: user.password })
         .expect(200)
-        .expect({ returnedUser })
+        .expect({ signupres: returnedUser })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -38,7 +41,7 @@ describe('Test Server', () => {
       request(app)
         .get('/users/3')
         .expect(200)
-        .expect({ returnedUser })
+        .expect(userReq)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
