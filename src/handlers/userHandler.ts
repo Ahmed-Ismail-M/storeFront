@@ -59,15 +59,14 @@ const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
     return res.sendStatus(403)
   }
   const token = issueToken(existing, '1hr')
-  // res.setHeader('Authorization', 'Bearer ' + token)
   return res.status(200).send({ jwt: token })
 }
 
 const userRoutes = (app: express.Application) => {
   app.get('/users', verifyAuthToken, index)
-  app.get('/users/:id', show)
+  app.get('/users/:id', verifyAuthToken, show)
   app.post('/users', create)
-  app.delete('/users', destroy)
+  app.delete('/users', verifyAuthToken, destroy)
   app.post('/signin', signIn)
 }
 

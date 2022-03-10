@@ -19,6 +19,7 @@ const userReq : GetUserRes = {
   last_name: user.last_name
 }
 describe('Test Server', () => {
+  let mytok: string = ''
   describe('test /users', () => {
     it('shoud return 200 ok create user', (done) => {
       request(app)
@@ -37,12 +38,16 @@ describe('Test Server', () => {
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
+    beforeEach(function (done) {
+      request(app).post('/signin').send({ first_name: user.first_name, password: user.password }).end((_err: any, res: { body: { jwt: string } }) => {
+        mytok = res.body.jwt;
+        done()
+      })
+    })
     it('shoud return 200 ok get users', (done) => {
-      const response = request(app).post('/signin').send({ first_name: user.first_name, password: user.password })
-      console.log('the token is :' + response.token)
       request(app)
         .get('/users')
-        .set('Authorization', 'Bearer ' + response.token)
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         // .expect(typeof Array)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -51,6 +56,7 @@ describe('Test Server', () => {
     it('shoud return 200 ok get user by id', (done) => {
       request(app)
         .get('/users/3')
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         .expect(userReq)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -59,6 +65,7 @@ describe('Test Server', () => {
     it('shoud return 200 ok delete user', (done) => {
       request(app)
         .delete('/users')
+        .set('Authorization', 'Bearer ' + mytok)
         .send({ id: 3 })
         .expect(200)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -70,6 +77,7 @@ describe('Test Server', () => {
       request(app)
         .post('/users')
         .send({ first_name: user.first_name, last_name: user.last_name })
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(400)
         // .expect({ signupres: returnedUser })
         .expect('Content-Type', 'text/html; charset=utf-8')
