@@ -37,7 +37,7 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       last_name: newUser.last_name
     }
     const token = issueToken({ user: signupres }, '1h')
-    res.json(token)
+    res.status(200).send({ jwt: token })
   } catch (err) {
     res.status(400)
     res.send({ error: (err as Error).message })
@@ -59,11 +59,12 @@ const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
     return res.sendStatus(403)
   }
   const token = issueToken(existing, '1hr')
-  return res.status(200).json(token)
+  // res.setHeader('Authorization', 'Bearer ' + token)
+  return res.status(200).send({ jwt: token })
 }
 
 const userRoutes = (app: express.Application) => {
-  app.get('/users', index)
+  app.get('/users', verifyAuthToken, index)
   app.get('/users/:id', show)
   app.post('/users', create)
   app.delete('/users', destroy)

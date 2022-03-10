@@ -38,8 +38,11 @@ describe('Test Server', () => {
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
     it('shoud return 200 ok get users', (done) => {
+      const response = request(app).post('/signin').send({ first_name: user.first_name, password: user.password })
+      console.log('the token is :' + response.token)
       request(app)
         .get('/users')
+        .set('Authorization', 'Bearer ' + response.token)
         .expect(200)
         // .expect(typeof Array)
         .expect('Content-Type', 'application/json; charset=utf-8')
