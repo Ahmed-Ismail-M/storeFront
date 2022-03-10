@@ -1,5 +1,5 @@
 import Express from 'express'
-import { GetUserRes, SignUpRes } from '../../api/userAPI'
+import { GetUserRes } from '../../api/userAPI'
 import { User } from '../../models/user'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
@@ -9,11 +9,11 @@ const user :User = {
   last_name: 'last name',
   password: 'general'
 }
-const returnedUser :SignUpRes = {
-  id: 3,
-  first_name: 'user',
-  last_name: 'last name'
-}
+// const returnedUser :SignUpRes = {
+//   id: 3,
+//   first_name: 'user',
+//   last_name: 'last name'
+// }
 const userReq : GetUserRes = {
   first_name: user.first_name,
   last_name: user.last_name
@@ -25,7 +25,15 @@ describe('Test Server', () => {
         .post('/users')
         .send({ id: user.id, first_name: user.first_name, last_name: user.last_name, password: user.password })
         .expect(200)
-        .expect({ signupres: returnedUser })
+        // .expect({ signupres: returnedUser })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .end((error: Error) => (error ? done.fail(error) : done()))
+    })
+    it('should sign in ', (done) => {
+      request(app)
+        .post('/signin')
+        .send({ first_name: user.first_name, password: user.password })
+        .expect(200)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -55,12 +63,13 @@ describe('Test Server', () => {
     })
   })
   describe('error test /users', () => {
-    it('shoud return error 400 price is not a number', (done) => {
+    it('shoud return 400 missing password', (done) => {
       request(app)
-        .delete('/users')
-        .send({ id: 33 })
-        .expect([])
-        .expect('Content-Type', 'application/json; charset=utf-8')
+        .post('/users')
+        .send({ first_name: user.first_name, last_name: user.last_name })
+        .expect(400)
+        // .expect({ signupres: returnedUser })
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
   })

@@ -4,6 +4,7 @@ import { UserStore } from '../datastore/userDS'
 import { ExpressHandler } from '../models/handler'
 import { GetUserRes, SignInReq, SignInRes, SignUpReq, SignUpRes } from '../api/userAPI'
 import { comparePass, issueToken } from '../utilities/security'
+import { verifyAuthToken } from '../middlewares/auth'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -21,6 +22,9 @@ const show = async (req: Request, res: Response) => {
 
 const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
   try {
+    if (!req.body.password || !req.body.first_name) {
+      return res.status(400).send(' Missing inputs')
+    }
     const user: User = {
       first_name: req.body.first_name as string,
       last_name: req.body.last_name as string,
@@ -32,11 +36,11 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       first_name: newUser.first_name,
       last_name: newUser.last_name
     }
-    const token = issueToken({ user: signupres }, '1s')
+    const token = issueToken({ user: signupres }, '1h')
     res.json(token)
   } catch (err) {
     res.status(400)
-    res.json(err as string)
+    res.send({ error: (err as Error).message })
   }
 }
 
@@ -51,7 +55,7 @@ const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
     return res.sendStatus(400)
   }
   const existing = await store.showByName(first_name)
-  if (!existing || comparePass(password, existing.password)) {
+  if (!existing || !comparePass(password, existing.password)) {
     return res.sendStatus(403)
   }
   const token = issueToken(existing, '1hr')

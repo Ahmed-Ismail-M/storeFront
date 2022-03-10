@@ -6,7 +6,7 @@ import { UserDAO } from './dao/userDAO'
 export class UserStore implements UserDAO {
   async showByName (first_name: string): Promise<User | undefined> {
     try {
-      const sql = 'SELECT * FROM Users WHERE firs_name=($1)'
+      const sql = 'SELECT * FROM Users WHERE first_name=($1)'
 
       const conn = await Client.connect()
 
