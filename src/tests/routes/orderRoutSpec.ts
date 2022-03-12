@@ -4,9 +4,7 @@ const request = require('supertest')
 const app: Express.Application = require('../../server')
 const order :Order = {
   id: 2,
-  product_id: 2,
   user_id: 2,
-  qty: 10,
   status: 'pending'
 }
 describe('Test Server', () => {
@@ -14,7 +12,7 @@ describe('Test Server', () => {
     it('shoud return 200 ok create order', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: order.qty, status: order.status })
+        .send({ id: order.id, user_id: order.user_id, status: order.status })
         .expect(200)
         .expect({ order })
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -49,7 +47,7 @@ describe('Test Server', () => {
     it('shoud return error 400 qty is not string', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: order.id, product_id: order.product_id, user_id: order.user_id, qty: 'string', status: order.status })
+        .send({ id: order.id, user_id: order.user_id, status: order.status })
         .expect(400)
         .expect({})
         .expect('Content-Type', 'application/json; charset=utf-8')

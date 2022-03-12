@@ -5,10 +5,8 @@ import { user, store as user_store } from './userSpec'
 const store = new OrderStore()
 const order: Order = {
   id: 1,
-  product_id: 2,
   user_id: 2,
-  status: 'pending',
-  qty: 1
+  status: 'pending'
 }
 describe('order model', () => {
   beforeAll(async () => {

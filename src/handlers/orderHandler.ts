@@ -17,14 +17,12 @@ const show = async (req: Request, res: Response) => {
 
 const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (req, res) => {
   try {
-    if (!req.body.product_id || !req.body.qty || !req.body.user_id) {
+    if (!req.body.user_id) {
       res.status(400)
     }
     const order: Order = {
       user_id: req.body.user_id as string,
-      product_id: req.body.product_id as string,
-      status: req.body.status as string,
-      qty: req.body.qty as number
+      status: req.body.status as string
     }
     const newOrder = await store.create(order)
     res.send({ order: newOrder })
