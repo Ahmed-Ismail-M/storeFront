@@ -31,13 +31,16 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       password: req.body.password as string
     }
     const newUser = await store.create(user)
+    const token = issueToken({ user: { id: newUser.id, first_name: newUser.first_name, last_name: newUser.last_name } }, '1h')
     const signupres: SignUpRes = {
-      id: newUser.id,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name
+      user: {
+        id: newUser.id,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name
+      },
+      jwt: token
     }
-    const token = issueToken({ user: signupres }, '1h')
-    res.status(200).send({ jwt: token })
+    res.status(200).send(signupres)
   } catch (err) {
     res.status(400)
     res.send({ error: (err as Error).message })
