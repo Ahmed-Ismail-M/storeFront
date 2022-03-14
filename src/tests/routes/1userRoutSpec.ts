@@ -9,11 +9,6 @@ const user :User = {
   last_name: 'last name',
   password: 'general'
 }
-// const returnedUser :SignUpRes = {
-//   id: 3,
-//   first_name: 'user',
-//   last_name: 'last name'
-// }
 const userReq : GetUserRes = {
   first_name: user.first_name,
   last_name: user.last_name

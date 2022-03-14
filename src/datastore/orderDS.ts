@@ -34,14 +34,11 @@ export class OrderStore implements OrderDAO {
   async create (o: Order): Promise<Order> {
     try {
       const sql =
-        'INSERT INTO Orders (product_id, user_id, qty, status) VALUES($1, $2, $3, $4) RETURNING * '
+        'INSERT INTO Orders (user_id, status) VALUES($1, $2) RETURNING * '
       // @ts-ignore
       const conn = await Client.connect()
-      console.log(o.product_id + ' ' + o.user_id)
       const result = await conn.query(sql, [
-        o.product_id,
         o.user_id,
-        o.qty,
         o.status
       ])
 

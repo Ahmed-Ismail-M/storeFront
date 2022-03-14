@@ -4,7 +4,7 @@ const request = require('supertest')
 const app: Express.Application = require('../../server')
 const order :Order = {
   id: 2,
-  user_id: 2,
+  user_id: '2',
   status: 'pending'
 }
 describe('Test Server', () => {
@@ -44,16 +44,16 @@ describe('Test Server', () => {
     })
   })
   describe('error test /orders', () => {
-    it('shoud return error 400 qty is not string', (done) => {
+    it('shoud return error 400 user_id not found', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: order.id, user_id: order.user_id, status: order.status })
+        .send({ id: order.id, user_id: 33, status: order.status })
         .expect(400)
         .expect({})
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
-    it('shoud return error 400 price is not a number', (done) => {
+    it('shoud return error 400 order id 33 not found', (done) => {
       request(app)
         .delete('/orders')
         .send({ id: 33 })
