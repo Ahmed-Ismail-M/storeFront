@@ -1,5 +1,5 @@
 import Client from '../db'
-import { Order } from '../models/order'
+import { Order, OrderProduct } from '../models/order'
 import { OrderDAO } from './dao/orderDAO'
 export class OrderStore implements OrderDAO {
   async index (): Promise<Order> {
@@ -63,6 +63,25 @@ export class OrderStore implements OrderDAO {
       return result.rows
     } catch (err) {
       throw new Error(`Could not delete Order ${id}. Error: ${err}`)
+    }
+  }
+
+  async addProduct (order_product:OrderProduct): Promise<OrderProduct> {
+    try {
+      const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
+      // @ts-ignore
+      const conn = await Client.connect()
+      const result = await conn.query(sql, [
+        order_product.quantity,
+        order_product.order_id,
+        order_product.product_id
+      ])
+
+      conn.release()
+
+      return result.rows[0]
+    } catch (err) {
+      throw new Error(`Could not add new product ${order_product.product_id}. Error: ${err}`)
     }
   }
 }

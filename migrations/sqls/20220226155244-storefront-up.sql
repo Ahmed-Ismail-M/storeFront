@@ -18,7 +18,7 @@ CONSTRAINT fk_user
       );
 CREATE TABLE order_products( 
 id          SERIAL      PRIMARY KEY, 
-qty         integer, 
-order_id    bigint      REFERENCES orders(id)         ON DELETE CASCADE,
-product_id  bigint      REFERENCES products(id)       ON DELETE CASCADE
+quantity    integer     NOT NULL, 
+order_id    bigint      NOT NULL          REFERENCES orders(id)         ON DELETE CASCADE,
+product_id  bigint      NOT NULL          REFERENCES products(id)       ON DELETE CASCADE
 );

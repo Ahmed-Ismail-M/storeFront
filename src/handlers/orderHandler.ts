@@ -3,7 +3,7 @@ import { CreateOrderReq, CreateOrderRes, DeleteOrderReq, DeleteOrderRes } from '
 import { OrderStore } from '../datastore/orderDS'
 import { asyncWrapper } from '../middlewares/logs'
 import { ExpressHandler } from '../models/handler'
-import { Order } from '../models/order'
+import { Order, OrderProduct } from '../models/order'
 const store = new OrderStore()
 
 const index = async (_req: Request, res: Response) => {
@@ -40,12 +40,28 @@ const destroy: ExpressHandler<DeleteOrderReq, DeleteOrderRes> = async (req, res)
     res.send({ error })
   }
 }
+const addProduct = async (_req: Request, res: Response) => {
+  const orderProduct: OrderProduct = {
+    order_id: _req.params.id,
+    product_id: _req.body.product_id,
+    quantity: _req.body.quantity
+  }
+
+  try {
+    const addedProduct = await store.addProduct(orderProduct)
+    res.json(addedProduct)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
+}
 
 const orderRoutes = (app: express.Application) => {
   app.get('/orders', asyncWrapper(index))
   app.get('/orders/:id', asyncWrapper(show))
   app.post('/orders', asyncWrapper(create))
   app.delete('/orders', asyncWrapper(destroy))
+  app.post('/orders/:id/products', asyncWrapper(addProduct))
 }
 
 export default orderRoutes

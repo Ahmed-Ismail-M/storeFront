@@ -1,4 +1,4 @@
-import { Order } from '../../models/order'
+import { Order, OrderProduct } from '../../models/order'
 import { OrderStore } from '../../datastore/orderDS'
 import { product, store as product_store } from './productSpec'
 import { user, store as user_store } from './userSpec'
@@ -29,6 +29,16 @@ describe('order model', () => {
     const result = await store.show(1)
     // @ts-ignore
     expect(result).toEqual(order)
+  })
+  it('should add product to order', async () => {
+    const orderProduct: OrderProduct = {
+      id: 1,
+      order_id: '1',
+      product_id: '2',
+      quantity: 10
+    }
+    const result = await store.addProduct(orderProduct)
+    expect(result).toEqual(orderProduct)
   })
   it('should return empty array', async () => {
     const result = await store.delete('1')
