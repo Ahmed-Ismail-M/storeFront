@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { Product } from '../models/product'
 import { ProductStore } from '../datastore/productDS'
+import { verifyAuthToken } from '../middlewares/auth'
 // import { verifyAuthToken } from '../middlewares/auth'
 const store = new ProductStore()
 
@@ -37,7 +38,7 @@ const destroy = async (req: Request, res: Response) => {
 const productRoutes = (app: express.Application) => {
   app.get('/products', index)
   app.get('/products/:id', show)
-  app.post('/products', create)
+  app.post('/products', verifyAuthToken, create)
   app.delete('/products', destroy)
 }
 

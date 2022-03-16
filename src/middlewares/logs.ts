@@ -16,7 +16,7 @@ export const logger = (
 
   next()
 }
-export function asyncWrapper (fn: Function) {
+export function asyncWrapper(fn: Function) {
   return (req: express.Request, res: express.Response, next: Function) => {
     return (
       Promise.resolve(fn(req, res))

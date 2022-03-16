@@ -4,7 +4,7 @@ import { hashPass } from '../utilities/security'
 import { UserDAO } from './dao/userDAO'
 
 export class UserStore implements UserDAO {
-  async showByName (first_name: string): Promise<User | undefined> {
+  async showByName(first_name: string): Promise<User | undefined> {
     try {
       const sql = 'SELECT * FROM Users WHERE first_name=($1)'
 
@@ -20,7 +20,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async index (): Promise<User> {
+  async index(): Promise<User> {
     try {
       const conn = await Client.connect()
       const sql = 'select * from Users'
@@ -33,7 +33,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async show (id: number): Promise<User> {
+  async show(id: number): Promise<User> {
     try {
       const sql = 'SELECT * FROM Users WHERE id=($1)'
 
@@ -49,7 +49,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async create (u: User): Promise<User> {
+  async create(u: User): Promise<User> {
     try {
       const sql =
         'INSERT INTO Users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *'
@@ -70,7 +70,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async delete (id: string): Promise<User> {
+  async delete(id: string): Promise<User> {
     try {
       const sql = 'DELETE FROM Users WHERE id=($1)'
       const conn = await Client.connect()

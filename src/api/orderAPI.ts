@@ -5,4 +5,6 @@ export interface CreateOrderRes {
   order: Order
 }
 export type DeleteOrderReq = Pick<Order, 'id'>
-export interface DeleteOrderRes {}
+export interface DeleteOrderRes {
+  order: Order
+}

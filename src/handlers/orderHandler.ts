@@ -6,6 +6,7 @@ import {
   DeleteOrderRes
 } from '../api/orderAPI'
 import { OrderStore } from '../datastore/orderDS'
+import { verifyAuthToken } from '../middlewares/auth'
 import { asyncWrapper } from '../middlewares/logs'
 import { ExpressHandler } from '../models/handler'
 import { Order, OrderProduct } from '../models/order'
@@ -46,10 +47,10 @@ const destroy: ExpressHandler<DeleteOrderReq, DeleteOrderRes> = async (
 ) => {
   try {
     const deleted = await store.delete(req.body.id as string)
-    res.json(deleted)
+    res.send({ order: deleted })
   } catch (error) {
     res.status(400)
-    res.send({ error })
+    res.send({ error: (error as Error).message })
   }
 }
 const addProduct = async (_req: Request, res: Response) => {
@@ -69,11 +70,11 @@ const addProduct = async (_req: Request, res: Response) => {
 }
 
 const orderRoutes = (app: express.Application) => {
-  app.get('/orders', asyncWrapper(index))
-  app.get('/orders/:id', asyncWrapper(show))
-  app.post('/orders', asyncWrapper(create))
-  app.delete('/orders', asyncWrapper(destroy))
-  app.post('/orders/:id/products', asyncWrapper(addProduct))
+  app.get('/orders', verifyAuthToken, asyncWrapper(index))
+  app.get('/orders/:id', verifyAuthToken, asyncWrapper(show))
+  app.post('/orders', verifyAuthToken, asyncWrapper(create))
+  app.delete('/orders', verifyAuthToken, asyncWrapper(destroy))
+  app.post('/orders/:id/products', verifyAuthToken, asyncWrapper(addProduct))
 }
 
 export default orderRoutes

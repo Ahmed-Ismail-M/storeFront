@@ -16,6 +16,7 @@ To get started run 'npm install' at the project root
 ## Steps to start the app
 
 ### 1.  DB Creation and Migrations
+- 'docker-compose up' will generate a pg image
 - 'npm run create' will create test database 
 - npm run migrate' will create tables in the dev env and test env. 
 

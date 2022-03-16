@@ -26,10 +26,10 @@ const show = async (req: Request, res: Response) => {
   res.json(userReq)
 }
 
-const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
+const create: ExpressHandler<SignUpReq, SignUpRes> = async (req, res) => {
   try {
     if (!req.body.password || !req.body.first_name) {
-      return res.status(400).send(' Missing inputs')
+      return res.status(400).send({ error: ' Missing inputs' })
     }
     const user: User = {
       first_name: req.body.first_name as string,
@@ -55,10 +55,9 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       },
       jwt: token
     }
-    res.status(200).send(signupres)
+    return res.status(200).send(signupres)
   } catch (err) {
-    res.status(400)
-    res.send({ error: (err as Error).message })
+    return res.status(400).send({ error: (err as Error).message })
   }
 }
 
@@ -70,11 +69,14 @@ const destroy = async (req: Request, res: Response) => {
 const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
   const { first_name, password } = req.body
   if (!first_name || !password) {
-    return res.sendStatus(400)
+    return res.status(400).send({ error: 'missing inputs' })
   }
   const existing = await store.showByName(first_name)
-  if (!existing || !comparePass(password, existing.password)) {
-    return res.sendStatus(403)
+  if (!existing) {
+    return res.status(403).send({ error: 'user dosnt exist' })
+  }
+  if (!comparePass(password, existing.password)) {
+    return res.status(403).send({ error: 'invalid password' })
   }
   const token = issueToken(existing, '1hr')
   return res.status(200).send({ jwt: token })

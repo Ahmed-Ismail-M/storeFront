@@ -2,7 +2,7 @@ import Client from '../db'
 import { Product } from '../models/product'
 import { ProductDAO } from './dao/productDAO'
 export class ProductStore implements ProductDAO {
-  async index (): Promise<Product> {
+  async index(): Promise<Product> {
     try {
       const conn = await Client.connect()
       const sql = 'select * from products'
@@ -15,7 +15,7 @@ export class ProductStore implements ProductDAO {
     }
   }
 
-  async show (id: number): Promise<Product> {
+  async show(id: number): Promise<Product> {
     try {
       const sql = 'SELECT * FROM products WHERE id=($1)'
       const conn = await Client.connect()
@@ -27,7 +27,7 @@ export class ProductStore implements ProductDAO {
     }
   }
 
-  async create (p: Product): Promise<Product> {
+  async create(p: Product): Promise<Product> {
     try {
       const sql =
         'INSERT INTO products (name, category, price) VALUES($1, $2, $3) RETURNING *'
@@ -45,7 +45,7 @@ export class ProductStore implements ProductDAO {
     }
   }
 
-  async delete (id: string): Promise<Product> {
+  async delete(id: string): Promise<Product> {
     try {
       const sql = 'DELETE FROM products WHERE id=($1)'
       const conn = await Client.connect()
