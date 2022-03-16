@@ -25,7 +25,7 @@ const create = async (req: Request, res: Response) => {
     res.json(newProduct)
   } catch (err) {
     res.status(400)
-    res.json(err)
+    res.send({ error: (err as Error).message })
   }
 }
 

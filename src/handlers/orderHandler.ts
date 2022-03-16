@@ -27,7 +27,7 @@ const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (req, 
     const newOrder = await store.create(order)
     res.send({ order: newOrder })
   } catch (error) {
-    return res.status(400).json(error as string)
+    res.send({ error: (error as Error).message })
   }
 }
 
@@ -52,7 +52,7 @@ const addProduct = async (_req: Request, res: Response) => {
     res.json(addedProduct)
   } catch (err) {
     res.status(400)
-    res.json(err)
+    res.send({ error: (err as Error).message })
   }
 }
 
