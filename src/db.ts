@@ -28,5 +28,4 @@ if (ENV === 'dev') {
     password: POSTGRES_PASSWORD
   })
 }
-console.log(ENV)
 export default Client

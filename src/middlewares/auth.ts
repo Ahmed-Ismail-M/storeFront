@@ -12,8 +12,7 @@ export const verifyAuthToken = (
     return res.status(401).send('not authorized')
   }
   try {
-    const payload = verifyToken(token)
-    console.log(payload)
+    verifyToken(token)
     next()
   } catch (error) {
     res.status(401).json(error)

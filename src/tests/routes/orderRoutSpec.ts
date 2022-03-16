@@ -12,7 +12,6 @@ describe('Test Server', () => {
       await test_product_store.create(test_product)
       const response = await request(app).post('/signin').send({ first_name: test_user.first_name, password: 'testpass' })
       mytok = response.body.jwt
-      console.log(response.body)
     })
     it('shoud return 200 ok create order', (done) => {
       request(app)

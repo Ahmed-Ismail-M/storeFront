@@ -35,7 +35,6 @@ describe('Test Server', async () => {
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
     it('shoud return 200 ok get product by id', (done) => {
-      console.log(mytok)
       request(app)
         .get('/products/1')
         .set('Authorization', 'Bearer ' + mytok)
