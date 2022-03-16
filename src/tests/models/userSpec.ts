@@ -1,13 +1,10 @@
 import { User } from '../../models/user'
 import { UserStore } from '../../datastore/userDS'
+import Client from '../../db'
+import { user } from '../types'
 export const store = new UserStore()
-export const user: User = {
-  id: 1,
-  first_name: 'testuser',
-  last_name: 'testname',
-  password: 'testpass'
-}
-export const userReturned: Pick<User, 'first_name' | 'last_name'> = {
+
+const userReturned: Pick<User, 'first_name' | 'last_name'> = {
   first_name: 'testuser',
   last_name: 'testname'
 }
@@ -35,5 +32,11 @@ describe('user model', () => {
     const result = await store.delete('1')
     // @ts-ignore
     expect(result).toEqual([])
+  })
+  afterAll(async () => {
+    const conn = await Client.connect()
+    const sql = 'ALTER SEQUENCE users_id_seq RESTART WITH 1'
+    await conn.query(sql)
+    conn.release()
   })
 })

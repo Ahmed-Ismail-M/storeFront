@@ -1,24 +1,24 @@
 import Express from 'express'
-import { Order, OrderProduct } from '../../models/order'
+import Client from '../../db'
+import { order, orderProduct, product, product_store, user, user_store } from '../types'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
-const order: Order = {
-  id: 2,
-  user_id: '2',
-  status: 'pending'
-}
-const orderProduct: OrderProduct = {
-  id: 2,
-  order_id: '2',
-  product_id: '2',
-  quantity: 10
-}
+let mytok: string = ''
+
 describe('Test Server', () => {
   describe('test /orders', () => {
+    beforeAll(async function () {
+      await user_store.create(user)
+      await product_store.create(product)
+      const response = await request(app).post('/signin').send({ first_name: user.first_name, password: 'testpass' })
+      mytok = response.body.jwt
+      console.log(response.body)
+    })
     it('shoud return 200 ok create order', (done) => {
       request(app)
         .post('/orders')
         .send({ id: order.id, user_id: order.user_id, status: order.status })
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         .expect({ order })
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -27,6 +27,7 @@ describe('Test Server', () => {
     it('shoud return 200 ok get order', (done) => {
       request(app)
         .get('/orders')
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         // .expect(typeof Array)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -34,7 +35,8 @@ describe('Test Server', () => {
     })
     it('shoud return 200 ok get order by id', (done) => {
       request(app)
-        .get('/orders/2')
+        .get('/orders/1')
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         .expect(order)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -42,9 +44,10 @@ describe('Test Server', () => {
     })
     it('shoud return 200 ok create order product', (done) => {
       request(app)
-        .post('/orders/2/products')
+        .post('/orders/1/products')
         .send(orderProduct)
         .expect(200)
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(orderProduct)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
@@ -52,7 +55,8 @@ describe('Test Server', () => {
     it('shoud return 200 ok delete order', (done) => {
       request(app)
         .delete('/orders')
-        .send({ id: 3 })
+        .send({ id: 1 })
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
@@ -63,6 +67,7 @@ describe('Test Server', () => {
       request(app)
         .post('/orders')
         .send({ id: order.id, user_id: 33, status: order.status })
+        .set('Authorization', 'Bearer ' + mytok)
         .expect(400)
         .expect({
           error:
@@ -75,9 +80,23 @@ describe('Test Server', () => {
       request(app)
         .delete('/orders')
         .send({ id: 33 })
-        .expect([])
+        .set('Authorization', 'Bearer ' + mytok)
+        .expect({ order: [] })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
+  })
+  afterAll(async () => {
+    await user_store.delete('1')
+    await product_store.delete('1')
+    const conn = await Client.connect()
+    const sql =
+      `
+      ALTER SEQUENCE orders_id_seq RESTART WITH 1;
+      ALTER SEQUENCE users_id_seq RESTART WITH 1;
+      ALTER SEQUENCE products_id_seq RESTART WITH 1;
+      `
+    await conn.query(sql)
+    conn.release()
   })
 })

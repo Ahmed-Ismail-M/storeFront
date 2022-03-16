@@ -1,17 +1,16 @@
-import { Order, OrderProduct } from '../../models/order'
-import { OrderStore } from '../../datastore/orderDS'
-import { product, store as product_store } from './productSpec'
-import { user, store as user_store } from './userSpec'
-const store = new OrderStore()
-const order: Order = {
-  id: 1,
-  user_id: '2',
-  status: 'pending'
-}
+import Client from '../../db'
+import {
+  order,
+  orderProduct,
+  product,
+  product_store,
+  store,
+  user,
+  user_store
+} from '../types'
+
 describe('order model', () => {
   beforeAll(async () => {
-    product.id = 2
-    user.id = 2
     await product_store.create(product)
     await user_store.create(user)
   })
@@ -31,12 +30,6 @@ describe('order model', () => {
     expect(result).toEqual(order)
   })
   it('should add product to order', async () => {
-    const orderProduct: OrderProduct = {
-      id: 1,
-      order_id: '1',
-      product_id: '2',
-      quantity: 10
-    }
     const result = await store.addProduct(orderProduct)
     expect(result).toEqual(orderProduct)
   })
@@ -44,5 +37,20 @@ describe('order model', () => {
     const result = await store.delete('1')
     // @ts-ignore
     expect(result).toEqual([])
+  })
+  afterAll(async () => {
+    await product_store.delete('1')
+    await user_store.delete('1')
+    // await store.delete('1')
+    const conn = await Client.connect()
+    const sql =
+    `
+    ALTER SEQUENCE order_products_id_seq RESTART WITH 1;
+    ALTER SEQUENCE orders_id_seq RESTART WITH 1;
+    ALTER SEQUENCE users_id_seq RESTART WITH 1;
+    ALTER SEQUENCE products_id_seq RESTART WITH 1;
+    `
+    await conn.query(sql)
+    conn.release()
   })
 })
