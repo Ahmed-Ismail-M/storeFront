@@ -68,6 +68,19 @@ const addProduct = async (_req: Request, res: Response) => {
     res.send({ error: (err as Error).message })
   }
 }
+const update = async (_req: Request, res: Response) => {
+  const order: Order = {
+    user_id: _req.body.user_id as string,
+    status: _req.body.status as string
+  }
+  try {
+    const newOrder = await store.update(_req.params.id, order)
+    res.send({ order: newOrder })
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
+}
 
 const orderRoutes = (app: express.Application) => {
   app.get('/orders', verifyAuthToken, asyncWrapper(index))
@@ -75,6 +88,7 @@ const orderRoutes = (app: express.Application) => {
   app.post('/orders', verifyAuthToken, asyncWrapper(create))
   app.delete('/orders', verifyAuthToken, asyncWrapper(destroy))
   app.post('/orders/:id/products', verifyAuthToken, asyncWrapper(addProduct))
+  app.put('/orders/:id', verifyAuthToken, asyncWrapper(update))
 }
 
 export default orderRoutes

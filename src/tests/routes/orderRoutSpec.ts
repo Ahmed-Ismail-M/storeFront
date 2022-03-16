@@ -41,6 +41,16 @@ describe('Test Server', () => {
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
+    it('shoud return 200 ok update order by id', (done) => {
+      request(app)
+        .put('/orders/1')
+        .set('Authorization', 'Bearer ' + mytok)
+        .send({ user_id: '1', status: 'active' })
+        .expect(200)
+        .expect({ order: test_order })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .end((error: Error) => (error ? done.fail(error) : done()))
+    })
     it('shoud return 200 ok create order product', (done) => {
       request(app)
         .post('/orders/1/products')
