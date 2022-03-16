@@ -10,7 +10,8 @@
     "build": "npx tsc",
     "jasmine": "jasmine",
     "drop": "db-migrate --env test down",
-    "migrate": " db-migrate up && db-migrate db:create store_test && db-migrate --env test up",
+    "create":" db-migrate db:create store_test",
+    "migrate": " db-migrate up  && db-migrate --env test up",
     "test": "db-migrate --env test up &&npm run build &&cross-env ENV=test jasmine && db-migrate --env test down -c 5"
   },
   "repository": {

@@ -16,8 +16,8 @@ To get started run 'npm install' at the project root
 ## Steps to start the app
 
 ### 1.  DB Creation and Migrations
-
-- npm run migrate' will create tables in the dev env and will create test database for test env. Note that this command will run once 
+- 'npm run create' will create test database 
+- npm run migrate' will create tables in the dev env and test env. 
 
 ### 2. Testing
 
