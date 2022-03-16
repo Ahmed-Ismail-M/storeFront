@@ -1,46 +1,46 @@
 import Client from '../../db'
 import {
-  order,
-  orderProduct,
-  product,
-  product_store,
-  store,
-  user,
-  user_store
+  test_order,
+  test_orderProduct,
+  test_product,
+  test_product_store,
+  test_order_store,
+  test_user,
+  test_user_store
 } from '../types'
 
 describe('order model', () => {
   beforeAll(async () => {
-    await product_store.create(product)
-    await user_store.create(user)
+    await test_product_store.create(test_product)
+    await test_user_store.create(test_user)
   })
   it('should return order created', async () => {
-    const result = await store.create(order)
+    const result = await test_order_store.create(test_order)
     // @ts-ignore
-    expect(result).toEqual(order)
+    expect(result).toEqual(test_order)
   })
   it('should return a list of orders', async () => {
-    const result = await store.index()
+    const result = await test_order_store.index()
     // @ts-ignore
-    expect(result).toEqual([order])
+    expect(result).toEqual([test_order])
   })
   it('should return selected order', async () => {
-    const result = await store.show(1)
+    const result = await test_order_store.show(1)
     // @ts-ignore
-    expect(result).toEqual(order)
+    expect(result).toEqual(test_order)
   })
   it('should add product to order', async () => {
-    const result = await store.addProduct(orderProduct)
-    expect(result).toEqual(orderProduct)
+    const result = await test_order_store.addProduct(test_orderProduct)
+    expect(result).toEqual(test_orderProduct)
   })
   it('should return empty array', async () => {
-    const result = await store.delete('1')
+    const result = await test_order_store.delete('1')
     // @ts-ignore
     expect(result).toEqual([])
   })
   afterAll(async () => {
-    await product_store.delete('1')
-    await user_store.delete('1')
+    await test_product_store.delete('1')
+    await test_user_store.delete('1')
     // await store.delete('1')
     const conn = await Client.connect()
     const sql =

@@ -1,7 +1,7 @@
 import { User } from '../../models/user'
 import { UserStore } from '../../datastore/userDS'
 import Client from '../../db'
-import { user } from '../types'
+import { test_user } from '../types'
 export const store = new UserStore()
 
 const userReturned: Pick<User, 'first_name' | 'last_name'> = {
@@ -10,7 +10,7 @@ const userReturned: Pick<User, 'first_name' | 'last_name'> = {
 }
 describe('user model', () => {
   it('should return user created', async () => {
-    const result = await store.create(user)
+    const result = await store.create(test_user)
     // @ts-ignore
     expect(result.first_name).toEqual(userReturned.first_name)
   })

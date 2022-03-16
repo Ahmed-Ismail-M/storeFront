@@ -1,13 +1,13 @@
 import Express from 'express'
 import Client from '../../db'
-import { product, user, user_store } from '../types'
+import { test_product, test_user, test_user_store } from '../types'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
 let mytok: string = ''
 describe('Test Server', async () => {
   beforeAll(async function () {
-    await user_store.create(user)
-    const response = await request(app).post('/signin').send({ first_name: user.first_name, password: 'testpass' })
+    await test_user_store.create(test_user)
+    const response = await request(app).post('/signin').send({ first_name: test_user.first_name, password: 'testpass' })
     mytok = response.body.jwt
   })
   describe('test /products', () => {
@@ -15,14 +15,14 @@ describe('Test Server', async () => {
       request(app)
         .post('/products')
         .send({
-          id: product.id,
-          name: product.name,
-          category: product.category,
-          price: product.price
+          id: test_product.id,
+          name: test_product.name,
+          category: test_product.category,
+          price: test_product.price
         })
         .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
-        .expect(product)
+        .expect(test_product)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -40,7 +40,7 @@ describe('Test Server', async () => {
         .get('/products/1')
         .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
-        .expect(product)
+        .expect(test_product)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -59,9 +59,9 @@ describe('Test Server', async () => {
         .post('/products')
         .set('Authorization', 'Bearer ' + mytok)
         .send({
-          id: product.id,
-          name: product.name,
-          category: product.category,
+          id: test_product.id,
+          name: test_product.name,
+          category: test_product.category,
           price: 'string'
         })
         .expect(400)
@@ -78,9 +78,9 @@ describe('Test Server', async () => {
     })
   })
   afterAll(async () => {
-    await user_store.delete('1')
+    await test_user_store.delete('1')
     const conn = await Client.connect()
-    const sql = 'ALTER SEQUENCE products_id_seq RESTART WITH 1'
+    const sql = 'ALTER SEQUENCE products_id_seq RESTART WITH 1; ALTER SEQUENCE users_id_seq RESTART WITH 1;'
     await conn.query(sql)
     conn.release()
   })

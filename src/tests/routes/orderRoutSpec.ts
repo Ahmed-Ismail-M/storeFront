@@ -1,6 +1,6 @@
 import Express from 'express'
 import Client from '../../db'
-import { order, orderProduct, product, product_store, user, user_store } from '../types'
+import { test_order, test_orderProduct, test_product, test_product_store, test_user, test_user_store } from '../types'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
 let mytok: string = ''
@@ -8,19 +8,19 @@ let mytok: string = ''
 describe('Test Server', () => {
   describe('test /orders', () => {
     beforeAll(async function () {
-      await user_store.create(user)
-      await product_store.create(product)
-      const response = await request(app).post('/signin').send({ first_name: user.first_name, password: 'testpass' })
+      await test_user_store.create(test_user)
+      await test_product_store.create(test_product)
+      const response = await request(app).post('/signin').send({ first_name: test_user.first_name, password: 'testpass' })
       mytok = response.body.jwt
       console.log(response.body)
     })
     it('shoud return 200 ok create order', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: order.id, user_id: order.user_id, status: order.status })
+        .send({ id: test_order.id, user_id: test_order.user_id, status: test_order.status })
         .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
-        .expect({ order })
+        .expect({ order: test_order })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -38,17 +38,17 @@ describe('Test Server', () => {
         .get('/orders/1')
         .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
-        .expect(order)
+        .expect(test_order)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
     it('shoud return 200 ok create order product', (done) => {
       request(app)
         .post('/orders/1/products')
-        .send(orderProduct)
+        .send(test_orderProduct)
         .expect(200)
         .set('Authorization', 'Bearer ' + mytok)
-        .expect(orderProduct)
+        .expect(test_orderProduct)
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
@@ -66,7 +66,7 @@ describe('Test Server', () => {
     it('shoud return error 400 user_id not found', (done) => {
       request(app)
         .post('/orders')
-        .send({ id: order.id, user_id: 33, status: order.status })
+        .send({ id: test_order.id, user_id: 33, status: test_order.status })
         .set('Authorization', 'Bearer ' + mytok)
         .expect(400)
         .expect({
@@ -87,8 +87,8 @@ describe('Test Server', () => {
     })
   })
   afterAll(async () => {
-    await user_store.delete('1')
-    await product_store.delete('1')
+    await test_user_store.delete('1')
+    await test_product_store.delete('1')
     const conn = await Client.connect()
     const sql =
       `
