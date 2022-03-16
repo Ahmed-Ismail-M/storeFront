@@ -29,6 +29,12 @@ describe('order model', () => {
     // @ts-ignore
     expect(result).toEqual(test_order)
   })
+  it('should update order', async () => {
+    const result = await test_order_store.update('1', { user_id: '1', status: 'active' })
+    // @ts-ignore
+    test_order.status = 'active'
+    expect(result).toEqual(test_order)
+  })
   it('should add product to order', async () => {
     const result = await test_order_store.addProduct(test_orderProduct)
     expect(result).toEqual(test_orderProduct)

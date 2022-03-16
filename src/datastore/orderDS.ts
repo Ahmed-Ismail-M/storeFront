@@ -2,6 +2,22 @@ import Client from '../db'
 import { Order, OrderProduct } from '../models/order'
 import { OrderDAO } from './dao/orderDAO'
 export class OrderStore implements OrderDAO {
+  async update (id: string, o: Order): Promise<Order> {
+    try {
+      const sql = `UPDATE Orders SET user_id = ($1) , 
+                  status = ($2) WHERE id=($3) RETURNING *`
+      // @ts-ignore
+      const conn = await Client.connect()
+      const result = await conn.query(sql, [o.user_id, o.status, id])
+
+      conn.release()
+      // @ts-ignore
+      return result.rows[0]
+    } catch (err) {
+      throw new Error(`Could not update Order ${id}. Error: ${err}`)
+    }
+  }
+
   async index (): Promise<Order> {
     try {
       const conn = await Client.connect()

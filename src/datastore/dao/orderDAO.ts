@@ -5,4 +5,5 @@ export interface OrderDAO {
   create(o: Order): Promise<Order>
   delete(id: string): Promise<Order>
   addProduct(order_product: OrderProduct): Promise<OrderProduct>
+  update(id: string, o: Order): Promise<Order>
 }
