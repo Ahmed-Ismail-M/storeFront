@@ -2,7 +2,7 @@ import Express from 'express'
 import { Product } from '../../models/product'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
-const product :Product = {
+const product: Product = {
   id: 3,
   name: 'product',
   price: 10.5,
@@ -14,7 +14,12 @@ describe('Test Server', () => {
     it('shoud return 200 ok create product', (done) => {
       request(app)
         .post('/products')
-        .send({ id: product.id, name: product.name, category: product.category, price: product.price })
+        .send({
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.price
+        })
         .expect(200)
         .expect(product)
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -49,9 +54,13 @@ describe('Test Server', () => {
     it('shoud return error 400 price is not a number', (done) => {
       request(app)
         .post('/products')
-        .send({ id: product.id, name: product.name, category: product.category, price: 'string' })
+        .send({
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: 'string'
+        })
         .expect(400)
-        .expect({})
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })

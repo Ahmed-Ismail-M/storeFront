@@ -37,10 +37,7 @@ export class OrderStore implements OrderDAO {
         'INSERT INTO Orders (user_id, status) VALUES($1, $2) RETURNING * '
       // @ts-ignore
       const conn = await Client.connect()
-      const result = await conn.query(sql, [
-        o.user_id,
-        o.status
-      ])
+      const result = await conn.query(sql, [o.user_id, o.status])
 
       conn.release()
 
@@ -66,9 +63,10 @@ export class OrderStore implements OrderDAO {
     }
   }
 
-  async addProduct (order_product:OrderProduct): Promise<OrderProduct> {
+  async addProduct (order_product: OrderProduct): Promise<OrderProduct> {
     try {
-      const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
+      const sql =
+        'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
       // @ts-ignore
       const conn = await Client.connect()
       const result = await conn.query(sql, [
@@ -81,7 +79,9 @@ export class OrderStore implements OrderDAO {
 
       return result.rows[0]
     } catch (err) {
-      throw new Error(`Could not add new product ${order_product.product_id}. Error: ${err}`)
+      throw new Error(
+        `Could not add new product ${order_product.product_id}. Error: ${err}`
+      )
     }
   }
 }

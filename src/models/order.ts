@@ -5,7 +5,7 @@ export type Order = {
 }
 export type OrderProduct = {
   id?: string | number
-  quantity: number,
-  order_id: string,
+  quantity: number
+  order_id: string
   product_id: string
 }

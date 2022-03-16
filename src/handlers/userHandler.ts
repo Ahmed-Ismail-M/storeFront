@@ -2,7 +2,13 @@ import express, { Request, Response } from 'express'
 import { User } from '../models/user'
 import { UserStore } from '../datastore/userDS'
 import { ExpressHandler } from '../models/handler'
-import { GetUserRes, SignInReq, SignInRes, SignUpReq, SignUpRes } from '../api/userAPI'
+import {
+  GetUserRes,
+  SignInReq,
+  SignInRes,
+  SignUpReq,
+  SignUpRes
+} from '../api/userAPI'
 import { comparePass, issueToken } from '../utilities/security'
 import { verifyAuthToken } from '../middlewares/auth'
 const store = new UserStore()
@@ -31,7 +37,16 @@ const create: ExpressHandler<SignUpReq, SignUpRes | {}> = async (req, res) => {
       password: req.body.password as string
     }
     const newUser = await store.create(user)
-    const token = issueToken({ user: { id: newUser.id, first_name: newUser.first_name, last_name: newUser.last_name } }, '1h')
+    const token = issueToken(
+      {
+        user: {
+          id: newUser.id,
+          first_name: newUser.first_name,
+          last_name: newUser.last_name
+        }
+      },
+      '1h'
+    )
     const signupres: SignUpRes = {
       user: {
         id: newUser.id,

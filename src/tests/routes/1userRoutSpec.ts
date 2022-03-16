@@ -3,13 +3,13 @@ import { GetUserRes } from '../../api/userAPI'
 import { User } from '../../models/user'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
-const user :User = {
+const user: User = {
   id: 3,
   first_name: 'user',
   last_name: 'last name',
   password: 'general'
 }
-const userReq : GetUserRes = {
+const userReq: GetUserRes = {
   first_name: user.first_name,
   last_name: user.last_name
 }
@@ -19,7 +19,12 @@ describe('Test Server', () => {
     it('shoud return 200 ok create user', (done) => {
       request(app)
         .post('/users')
-        .send({ id: user.id, first_name: user.first_name, last_name: user.last_name, password: user.password })
+        .send({
+          id: user.id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          password: user.password
+        })
         .expect(200)
         // .expect({ signupres: returnedUser })
         .expect('Content-Type', 'application/json; charset=utf-8')
@@ -34,10 +39,13 @@ describe('Test Server', () => {
         .end((error: Error) => (error ? done.fail(error) : done()))
     })
     beforeEach(function (done) {
-      request(app).post('/signin').send({ first_name: user.first_name, password: user.password }).end((_err: any, res: { body: { jwt: string } }) => {
-        mytok = res.body.jwt;
-        done()
-      })
+      request(app)
+        .post('/signin')
+        .send({ first_name: user.first_name, password: user.password })
+        .end((_err: any, res: { body: { jwt: string } }) => {
+          mytok = res.body.jwt
+          done()
+        })
     })
     it('shoud return 200 ok get users', (done) => {
       request(app)

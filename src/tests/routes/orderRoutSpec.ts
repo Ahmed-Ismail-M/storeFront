@@ -2,12 +2,12 @@ import Express from 'express'
 import { Order, OrderProduct } from '../../models/order'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
-const order :Order = {
+const order: Order = {
   id: 2,
   user_id: '2',
   status: 'pending'
 }
-const orderProduct : OrderProduct = {
+const orderProduct: OrderProduct = {
   id: 2,
   order_id: '2',
   product_id: '2',
@@ -64,7 +64,10 @@ describe('Test Server', () => {
         .post('/orders')
         .send({ id: order.id, user_id: 33, status: order.status })
         .expect(400)
-        .expect({})
+        .expect({
+          error:
+            'Could not add new Order undefined. Error: error: insert or update on table "orders" violates foreign key constraint "fk_user"'
+        })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })

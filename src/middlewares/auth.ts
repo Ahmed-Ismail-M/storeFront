@@ -1,7 +1,11 @@
 import express from 'express'
 import { verifyToken } from '../utilities/security'
 
-export const verifyAuthToken = (req: express.Request, res: express.Response, next: Function) => {
+export const verifyAuthToken = (
+  req: express.Request,
+  res: express.Response,
+  next: Function
+) => {
   const authorizationHeader = req.headers.authorization
   const token = authorizationHeader?.split(' ')[1]
   if (!token) {

@@ -1,5 +1,10 @@
 import express, { Request, Response } from 'express'
-import { CreateOrderReq, CreateOrderRes, DeleteOrderReq, DeleteOrderRes } from '../api/orderAPI'
+import {
+  CreateOrderReq,
+  CreateOrderRes,
+  DeleteOrderReq,
+  DeleteOrderRes
+} from '../api/orderAPI'
 import { OrderStore } from '../datastore/orderDS'
 import { asyncWrapper } from '../middlewares/logs'
 import { ExpressHandler } from '../models/handler'
@@ -15,7 +20,10 @@ const show = async (req: Request, res: Response) => {
   res.json(order)
 }
 
-const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (req, res) => {
+const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (
+  req,
+  res
+) => {
   try {
     if (!req.body.user_id) {
       res.status(400)
@@ -27,11 +35,15 @@ const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (req, 
     const newOrder = await store.create(order)
     res.send({ order: newOrder })
   } catch (error) {
+    res.status(400)
     res.send({ error: (error as Error).message })
   }
 }
 
-const destroy: ExpressHandler<DeleteOrderReq, DeleteOrderRes> = async (req, res) => {
+const destroy: ExpressHandler<DeleteOrderReq, DeleteOrderRes> = async (
+  req,
+  res
+) => {
   try {
     const deleted = await store.delete(req.body.id as string)
     res.json(deleted)

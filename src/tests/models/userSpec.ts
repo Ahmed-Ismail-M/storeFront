@@ -7,7 +7,7 @@ export const user: User = {
   last_name: 'testname',
   password: 'testpass'
 }
-export const userReturned: Pick<User, 'first_name'|'last_name'> = {
+export const userReturned: Pick<User, 'first_name' | 'last_name'> = {
   first_name: 'testuser',
   last_name: 'testname'
 }
@@ -20,11 +20,11 @@ describe('user model', () => {
   it('should return a list of users', async () => {
     const result = await store.index()
     // @ts-ignore
-    expect(result).toEqual([jasmine.objectContaining(
-      {
+    expect(result).toEqual([
+      jasmine.objectContaining({
         first_name: userReturned.first_name
-      }
-    )])
+      })
+    ])
   })
   it('should return selected user', async () => {
     const result = await store.show(1)
