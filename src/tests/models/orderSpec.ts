@@ -6,7 +6,8 @@ import {
   test_product_store,
   test_order_store,
   test_user,
-  test_user_store
+  test_user_store,
+  updated_test_order
 } from '../types'
 
 describe('order model', () => {
@@ -32,8 +33,7 @@ describe('order model', () => {
   it('should update order', async () => {
     const result = await test_order_store.update('1', { user_id: '1', status: 'active' })
     // @ts-ignore
-    test_order.status = 'active'
-    expect(result).toEqual(test_order)
+    expect(result).toEqual(updated_test_order)
   })
   it('should add product to order', async () => {
     const result = await test_order_store.addProduct(test_orderProduct)

@@ -12,6 +12,12 @@ export const test_user: User = {
   last_name: 'testname',
   password: 'testpass'
 }
+export const updated_test_user: User = {
+  id: 1,
+  first_name: 'updateduser',
+  last_name: 'updatedname',
+  password: 'updatedpass'
+}
 export const test_userReq: GetUserRes = {
   first_name: 'testuser',
   last_name: 'testname'
@@ -21,11 +27,22 @@ export const test_order: Order = {
   user_id: '1',
   status: 'pending'
 }
+export const updated_test_order: Order = {
+  id: 1,
+  user_id: '1',
+  status: 'active'
+}
 export const test_product: Product = {
   id: 1,
   name: 'testproduct',
   category: 'testcategory',
   price: 1000
+}
+export const updated_test_product: Product = {
+  id: 1,
+  name: 'updatedproduct',
+  category: 'updatedcategory',
+  price: 500
 }
 export const test_orderProduct: OrderProduct = {
   id: 1,

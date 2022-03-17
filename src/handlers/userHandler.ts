@@ -81,13 +81,27 @@ const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
   const token = issueToken(existing, '1hr')
   return res.status(200).send({ jwt: token })
 }
-
+const update = async (_req: Request, res: Response) => {
+  const user: User = {
+    first_name: _req.body.first_name as string,
+    last_name: _req.body.last_name as string,
+    password: _req.body.password
+  }
+  try {
+    const newUser = await store.update(_req.params.id, user)
+    res.send({ user: newUser })
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
+}
 const userRoutes = (app: express.Application) => {
   app.get('/users', verifyAuthToken, index)
   app.get('/users/:id', verifyAuthToken, show)
   app.post('/users', create)
   app.delete('/users', verifyAuthToken, destroy)
   app.post('/signin', signIn)
+  app.put('/users/:id', verifyAuthToken, update)
 }
 
 export default userRoutes

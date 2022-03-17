@@ -5,4 +5,5 @@ export interface UserDAO {
   showByName(first_name: string): Promise<User | undefined>
   create(o: User): Promise<User>
   delete(id: string): Promise<User>
+  update(id: string, u: User): Promise<User>
 }

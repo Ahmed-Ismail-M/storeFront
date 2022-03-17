@@ -1,6 +1,6 @@
 import Express from 'express'
 import Client from '../../db'
-import { test_order, test_orderProduct, test_product, test_product_store, test_user, test_user_store } from '../types'
+import { test_order, test_orderProduct, test_product, test_product_store, test_user, test_user_store, updated_test_order } from '../types'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
 let mytok: string = ''
@@ -47,7 +47,7 @@ describe('Test Server', () => {
         .set('Authorization', 'Bearer ' + mytok)
         .send({ user_id: '1', status: 'active' })
         .expect(200)
-        .expect({ order: test_order })
+        .expect({ order: updated_test_order })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })

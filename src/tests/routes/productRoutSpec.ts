@@ -1,6 +1,6 @@
 import Express from 'express'
 import Client from '../../db'
-import { test_product, test_user, test_user_store } from '../types'
+import { test_product, test_user, test_user_store, updated_test_product } from '../types'
 const request = require('supertest')
 const app: Express.Application = require('../../server')
 let mytok: string = ''
@@ -40,6 +40,16 @@ describe('Test Server', async () => {
         .set('Authorization', 'Bearer ' + mytok)
         .expect(200)
         .expect(test_product)
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .end((error: Error) => (error ? done.fail(error) : done()))
+    })
+    it('shoud return 200 ok update product by id', (done) => {
+      request(app)
+        .put('/products/1')
+        .set('Authorization', 'Bearer ' + mytok)
+        .send(updated_test_product)
+        .expect(200)
+        .expect({ product: updated_test_product })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .end((error: Error) => (error ? done.fail(error) : done()))
     })

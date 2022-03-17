@@ -4,7 +4,23 @@ import { hashPass } from '../utilities/security'
 import { UserDAO } from './dao/userDAO'
 
 export class UserStore implements UserDAO {
-  async showByName(first_name: string): Promise<User | undefined> {
+  async update (id: string, u: User): Promise<User> {
+    try {
+      const sql = `UPDATE Users SET first_name = ($1) , 
+                  last_name = ($2), password = ($3) WHERE id=($4) RETURNING *`
+      // @ts-ignore
+      const conn = await Client.connect()
+      const result = await conn.query(sql, [u.first_name, u.last_name, hashPass(u.password), id])
+
+      conn.release()
+      // @ts-ignore
+      return result.rows[0]
+    } catch (err) {
+      throw new Error(`Could not update Product ${id}. Error: ${err}`)
+    }
+  }
+
+  async showByName (first_name: string): Promise<User | undefined> {
     try {
       const sql = 'SELECT * FROM Users WHERE first_name=($1)'
 
@@ -20,7 +36,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async index(): Promise<User> {
+  async index (): Promise<User> {
     try {
       const conn = await Client.connect()
       const sql = 'select * from Users'
@@ -33,7 +49,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async show(id: number): Promise<User> {
+  async show (id: number): Promise<User> {
     try {
       const sql = 'SELECT * FROM Users WHERE id=($1)'
 
@@ -49,7 +65,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async create(u: User): Promise<User> {
+  async create (u: User): Promise<User> {
     try {
       const sql =
         'INSERT INTO Users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *'
@@ -70,7 +86,7 @@ export class UserStore implements UserDAO {
     }
   }
 
-  async delete(id: string): Promise<User> {
+  async delete (id: string): Promise<User> {
     try {
       const sql = 'DELETE FROM Users WHERE id=($1)'
       const conn = await Client.connect()
