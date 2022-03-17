@@ -47,7 +47,7 @@ password | VARCHAR     NOT NULL
 Column | Type
 --- | --- |
 id | SERIAL  PRIMARY KEY
-user_id |  BIGINT      NOT NULL
+user_id |  BIGINT      NOT NULL  REFERENCES users(id) ON DELETE CASCADE
 status  |  VARCHAR(20)
 
 #### OrdersProduct
