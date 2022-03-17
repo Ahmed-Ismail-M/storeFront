@@ -5,13 +5,14 @@
 This repo contains a simple app that manages users, products and orders.
 To get started run 'npm install' at the project root
 
-## Used Variables
+## Used Env Variables
 - POSTGRES_HOST= 127.0.0.1
 - POSTGRES_DB=store
 - POSTGRES_USER=postgres
 - POSTGRES_PASSWORD=postgres
 - POSTGRES_TEST_DB=store_test
 - BCRYPT_PASSWORD=password123
+- ENV=dev
 - SALT_ROUND=10
 - TOKEN_SECRET=tokenpassword
 

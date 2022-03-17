@@ -27,13 +27,13 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Update [token required] put'/orders/:id'
 
 ## Data Shapes
-#### Product
+#### Products
 -  id
 - name
 - price
 - category
 
-#### User
+#### Users
 - id
 - firstName
 - lastName
