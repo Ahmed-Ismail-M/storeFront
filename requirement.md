@@ -13,7 +13,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Users
 - Create  post'/users'
-- Sign In  get'/signin'
+- Sign In  post'/signin'
 - Index [token required] get'/users'
 - Show [token required] get'/users/:id'
 - Delete [token required] delete'/users'
