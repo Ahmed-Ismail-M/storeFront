@@ -82,19 +82,24 @@ const destroy = async (req: Request, res: Response) => {
 }
 
 const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {
-  const { first_name, password } = req.body
-  if (!first_name || !password) {
-    return res.status(400).send({ error: 'missing inputs' })
+  try {
+    const { first_name, password } = req.body
+    if (!first_name || !password) {
+      return res.status(400).send({ error: 'missing inputs' })
+    }
+    const existing = await store.showByName(first_name)
+    if (!existing) {
+      return res.status(403).send({ error: 'user dosnt exist' })
+    }
+    if (!comparePass(password, existing.password)) {
+      return res.status(403).send({ error: 'invalid password' })
+    }
+    const token = issueToken(existing, '1hr')
+    return res.status(200).send({ jwt: token })
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
   }
-  const existing = await store.showByName(first_name)
-  if (!existing) {
-    return res.status(403).send({ error: 'user dosnt exist' })
-  }
-  if (!comparePass(password, existing.password)) {
-    return res.status(403).send({ error: 'invalid password' })
-  }
-  const token = issueToken(existing, '1hr')
-  return res.status(200).send({ jwt: token })
 }
 const update = async (_req: Request, res: Response) => {
   const user: User = {
