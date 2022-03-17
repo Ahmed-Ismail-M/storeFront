@@ -26,10 +26,9 @@ To get started run 'npm install' at the project root
 ## Steps to start the app
 
 ### 1.  DB Creation and Migrations
-- 'docker-compose up' will generate a pg image with port 5432
-- POSTGRES_DB=store, POSTGRES_USER=postgres, POSTGRES_PASSWORD=postgres
-- 'npm run create' will create test database 
-- npm run migrate' will create tables in the dev env and test env. 
+1. 'docker-compose up' will generate a pg image with port 5432
+2. 'npm run create' will create test database 
+3. npm run migrate' will create tables in the dev env and test env. 
 
 ### 2. Testing
 
