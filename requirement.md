@@ -9,19 +9,22 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show get'/products/:id'
 - Create [token required] post'/products'
 - Delete [token required] delete'/products'
+- Update [token required] put'/products/:id'
 
 #### Users
+- Create  post'/users'
+- Sign In  get'/signin'
 - Index [token required] get'/users'
 - Show [token required] get'/users/:id'
-- Create  post'/users'
 - Delete [token required] delete'/users'
-- Sign In  get'/signin'
+- Update [token required] put'/users/:id'
 
 #### Orders
 - Index get'/orders'
 - Show get'/orders/:id'
 - Create [token required] post'/orders'
 - Delete [token required] delete'/orders'
+- Update [token required] put'/orders/:id'
 
 ## Data Shapes
 #### Product
@@ -38,7 +41,10 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Orders
 - id
-- id of each product in the order
-- quantity of each product in the order
 - user_id
-- status of order (active or complete)
+- status of order (active or pending)
+
+#### OrdersProduct
+- quantity of each product in the order
+- product_id
+- order_id
