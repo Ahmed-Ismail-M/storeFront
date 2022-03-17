@@ -14,16 +14,26 @@ import { verifyAuthToken } from '../middlewares/auth'
 const store = new UserStore()
 
 const index = async (_req: Request, res: Response) => {
-  const users = await store.index()
-  res.json(users)
+  try {
+    const users = await store.index()
+    res.json(users)
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
 }
 const show = async (req: Request, res: Response) => {
-  const user = await store.show(parseInt(req.params.id) as number)
-  const userReq: GetUserRes = {
-    first_name: user.first_name,
-    last_name: user.last_name
+  try {
+    const user = await store.show(parseInt(req.params.id) as number)
+    const userReq: GetUserRes = {
+      first_name: user.first_name,
+      last_name: user.last_name
+    }
+    res.json(userReq)
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
   }
-  res.json(userReq)
 }
 
 const create: ExpressHandler<SignUpReq, SignUpRes> = async (req, res) => {
@@ -62,8 +72,13 @@ const create: ExpressHandler<SignUpReq, SignUpRes> = async (req, res) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.delete(req.body.id)
-  res.json(deleted)
+  try {
+    const deleted = await store.delete(req.body.id)
+    res.json(deleted)
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
 }
 
 const signIn: ExpressHandler<SignInReq, SignInRes> = async (req, res) => {

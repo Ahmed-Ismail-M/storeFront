@@ -13,12 +13,22 @@ import { Order, OrderProduct } from '../models/order'
 const store = new OrderStore()
 
 const index = async (_req: Request, res: Response) => {
-  const orders = await store.index()
-  res.json(orders)
+  try {
+    const orders = await store.index()
+    res.json(orders)
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
 }
 const show = async (req: Request, res: Response) => {
-  const order = await store.show(parseInt(req.params.id) as number)
-  res.json(order)
+  try {
+    const order = await store.show(parseInt(req.params.id) as number)
+    res.json(order)
+  } catch (error) {
+    res.status(400)
+    res.send({ error: (error as Error).message })
+  }
 }
 
 const create: ExpressHandler<CreateOrderReq, CreateOrderRes | {}> = async (
