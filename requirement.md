@@ -28,23 +28,32 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## Data Shapes
 #### Products
--  id
-- name
-- price
-- category
+Column | Type
+--- | --- |
+id | SERIAL       PRIMARY KEY
+name | VARCHAR(100) UNIQUE NOT NULL
+price | REAL         NOT NULL
+category | VARCHAR(50)
 
 #### Users
-- id
-- firstName
-- lastName
-- password
+Column | Type
+--- | --- |
+id | SERIAL  PRIMARY KEY
+firstName |  VARCHAR(50) UNIQUE NOT NULL
+lastName | VARCHAR(50)
+password | VARCHAR     NOT NULL
 
 #### Orders
-- id
-- user_id
-- status of order (active or pending)
+Column | Type
+--- | --- |
+id | SERIAL  PRIMARY KEY
+user_id |  BIGINT      NOT NULL
+status  |  VARCHAR(20)
 
 #### OrdersProduct
-- quantity of each product in the order
-- product_id
-- order_id
+Column | Type
+--- | --- |
+id | SERIAL  PRIMARY KEY
+quantity | integer     NOT NULL
+product_id |  bigint      NOT NULL REFERENCES products(id)       ON DELETE CASCADE
+order_id |  bigint      NOT NULL REFERENCES orders(id)         ON DELETE CASCADE
