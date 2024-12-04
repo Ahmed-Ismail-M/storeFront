@@ -8,3 +8,4 @@ npx eslint --init
 Add a build script to your package.json file "build": "npx tsc"
 npm run build
 node build/.
+test
